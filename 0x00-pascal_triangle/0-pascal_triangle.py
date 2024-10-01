@@ -6,9 +6,10 @@ def pascal_triangle(n):
         return pascal_triangle_list
 
     for i in range(n):
-        row = [1]
+        row = [1]  # front of the row is always 1
         for j in range(i - 1):
-            row.append(pascal_triangle_list[i - 1][j] + pascal_triangle_list[i - 1][j + 1])
+            row.append(pascal_triangle_list[i - 1][j]
+                       + pascal_triangle_list[i - 1][j + 1])
         # add 1 when required
         if i != 0:
             row.append(1)  # back of the row is always 1
