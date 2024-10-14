@@ -16,27 +16,15 @@ def canUnlockAll(boxes):
     Returns:
         bool: True if all boxes can be unlocked, False otherwise.
     """
+    unlocked_boxes = set()
     size = len(boxes)
-    if size == 1:
-        return True
-    unlocked_boxes = {0}
-    check_boxes(0, boxes, size, unlocked_boxes)
+    stack = [0]
+
+    while stack:
+        current_box = stack.pop()
+        if current_box not in unlocked_boxes and current_box < size:
+            unlocked_boxes.add(current_box)
+            for key in boxes[current_box]:
+                if key not in unlocked_boxes:
+                    stack.append(key)
     return len(unlocked_boxes) == size
-
-
-def check_boxes(current_box, boxes, size, unlocked_boxes):
-    """
-    Recursively checks and unlocks boxes using available keys.
-
-    Args:
-        current_box (int): The index of the current box being unlocked.
-        boxes (list of lists): A list of boxes where each box contains keys
-                            to other boxes.
-        size (int): Total number of boxes
-        unlocked_boxes (set): A set of box indices that have been unlocked.
-    """
-    keys_to_use = boxes[current_box]
-    for next_box in keys_to_use:
-        if next_box not in unlocked_boxes and next_box < size:
-            unlocked_boxes.add(next_box)
-            check_boxes(next_box, boxes, size, unlocked_boxes)
