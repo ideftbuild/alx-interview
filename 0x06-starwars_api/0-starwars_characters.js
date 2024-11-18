@@ -15,8 +15,8 @@ const filmID = args[0];
 request(`https://swapi-api.alx-tools.com/api/films/${filmID}`,
   function (err, res, body) {
     if (!err) {
-      res = JSON.parse(body);
-      res.characters.forEach(url => {
+      data = JSON.parse(body);
+      data.characters.forEach(url => {
         request(url, function (err, res, body) {
           if (!err) {
             const character = JSON.parse(body);
