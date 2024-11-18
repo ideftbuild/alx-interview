@@ -12,17 +12,31 @@ if (args.length !== 1) {
 }
 const filmID = args[0];
 
-request(`https://swapi-api.alx-tools.com/api/films/${filmID}`,
-  function (err, res, body) {
-    if (!err) {
-      data = JSON.parse(body);
-      data.characters.forEach(url => {
-        request(url, function (err, res, body) {
-          if (!err) {
-            const character = JSON.parse(body);
-            console.log(character.name);
-          }
-        });
-      });
-    }
+function fetchUrl (url) {
+  return new Promise((resolve, reject) => {
+    request({ url, json: true }, (err, res, body) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    });
   });
+}
+
+async function fetchCharacters (url) {
+  try {
+    // Fetch the film data
+    const filmData = await fetchUrl(url);
+
+    // Fetch characters sequentially to maintain order
+    for (const characterUrl of filmData.characters) {
+      const character = await fetchUrl(characterUrl);
+      console.log(character.name);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+fetchCharacters(`https://swapi-api.alx-tools.com/api/films/${filmID}`);
