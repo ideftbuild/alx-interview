@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Module: 0-prime_game"""
-from itertools import cycle
 
 
 def is_prime(n):
@@ -44,9 +43,10 @@ def isWinner(x, nums):
     for n in nums:
         # Create a set of consecutive integers
         current_set = set(range(1, n + 1))
+        current_player = 'Maria'
 
         # Alternate between Maria and Ben
-        for player in cycle(['Maria', 'Ben']):
+        while True:
             # Find a valid prime move
             valid_move = False
             primes = sorted(num for num in current_set if is_prime(num))
@@ -59,11 +59,13 @@ def isWinner(x, nums):
 
             # If no move possible, current player loses the round
             if not valid_move:
-                if player == 'Maria':
+                if current_player == 'Maria':
                     ben_wins += 1
                 else:
                     maria_wins += 1
                 break
+
+            current_player = 'Ben' if current_player == 'Maria' else 'Maria'
 
     # Determine overall winner
     if maria_wins > ben_wins:
